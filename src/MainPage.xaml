@@ -1,0 +1,243 @@
+<Page
+    x:Class="AppLibrary.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AppLibrary"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="RootGrid">
+        <NavigationView x:Name="NavView" PaneDisplayMode="Left" IsSettingsVisible="True" ItemInvoked="NavView_ItemInvoked">
+            <NavigationView.AutoSuggestBox>
+                <AutoSuggestBox x:Name="SearchBox" PlaceholderText="Search" TextChanged="SearchBox_TextChanged">
+                    <AutoSuggestBox.QueryIcon>
+                        <FontIcon Glyph="&#xE721;"/>
+                    </AutoSuggestBox.QueryIcon>
+                </AutoSuggestBox>
+            </NavigationView.AutoSuggestBox>
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="All Apps" Tag="all_apps" IsSelected="True">
+                    <NavigationViewItem.Icon><FontIcon Glyph="&#xE71D;"/></NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Pins" Tag="pins">
+                    <NavigationViewItem.Icon><FontIcon Glyph="&#xE718;"/></NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Favourites" Tag="favourites">
+                    <NavigationViewItem.Icon><FontIcon Glyph="&#xE734;"/></NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Editor" Tag="editor">
+                    <NavigationViewItem.Icon><FontIcon Glyph="&#xE70F;"/></NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="About" Tag="about">
+                    <NavigationViewItem.Icon><FontIcon Glyph="&#xE82F;"/></NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+
+            <Grid Padding="24">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- App Custom Display Header Title -->
+                <TextBlock x:Name="AppHeaderTitle" Grid.Row="0" Text="App Library" FontSize="26" FontWeight="Bold" Margin="0,0,0,16"/>
+
+                <!-- Top Action Header (SplitButton & Imports) -->
+                <Grid x:Name="HeaderActionsPanel" Grid.Row="1" Margin="0,0,0,20">
+                    <SplitButton Content="Select" Click="SelectSplitButton_Click" HorizontalAlignment="Left">
+                        <SplitButton.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Select all" Click="SelectAll_Click"/>
+                                <MenuFlyoutItem Text="Delete Selection" Click="DeleteSelection_Click">
+                                    <MenuFlyoutItem.Icon><FontIcon Glyph="&#xE74D;"/></MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                            </MenuFlyout>
+                        </SplitButton.Flyout>
+                    </SplitButton>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12">
+                        <Button Click="NewButton_Click" Background="Transparent" BorderThickness="0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE710;" FontSize="14"/>
+                                <TextBlock Text="Add" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Click="ImportButton_Click" Background="Transparent" BorderThickness="0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE710;" FontSize="14"/>
+                                <TextBlock Text="Import" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <!-- 1. Main Grid for Cards -->
+                <GridView x:Name="AppsGridView" Grid.Row="2" ItemsSource="{x:Bind DisplayedApps, Mode=OneWay}">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="local:GameApp">
+                            <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Width="320" Height="220" Margin="8">
+                                <Grid Padding="12">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Top Row: CheckBox, Custom/Extracted App Icon, Name -->
+                                    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,8">
+                                        <CheckBox IsChecked="{x:Bind IsSelected, Mode=TwoWay}" Visibility="{x:Bind CheckBoxVisibility, Mode=OneWay}"/>
+                                        <Border Width="24" Height="24" CornerRadius="4" Background="Gray">
+                                            <Image Stretch="UniformToFill" Source="{x:Bind IconImageSource, Mode=OneWay}"/>
+                                        </Border>
+                                        <TextBlock Text="{x:Bind Name, Mode=OneWay}" VerticalAlignment="Center" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+
+                                    <!-- Middle Row: Custom/Extracted Banner -->
+                                    <Border Grid.Row="1" Background="DarkGray" CornerRadius="4">
+                                        <Grid>
+                                            <TextBlock Text="BANNER" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+                                            <Image Stretch="UniformToFill" Source="{x:Bind BannerImageSource, Mode=OneWay}"/>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Bottom Row: Play, Edit, Folder, Pin, Fav, Author -->
+                                    <Grid Grid.Row="2" Margin="0,8,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                            <Button Padding="4" Click="PlayButton_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <FontIcon Glyph="&#xE768;" FontSize="12"/>
+                                                    <TextBlock Text="Play" FontSize="12"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Padding="4" Click="EditButton_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <FontIcon Glyph="&#xE70F;" FontSize="12"/>
+                                                    <TextBlock Text="Edit" FontSize="12"/>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Padding="4" Click="FolderButton_Click">
+                                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                                    <FontIcon Glyph="&#xE838;" FontSize="12"/>
+                                                    <TextBlock Text="Folder" FontSize="12"/>
+                                                </StackPanel>
+                                            </Button>
+                                            
+                                            <ToggleButton Background="Transparent" BorderThickness="0" Margin="2,0,0,0" IsChecked="{x:Bind IsFavourite, Mode=TwoWay}">
+                                                <FontIcon Glyph="&#xE734;" FontSize="14"/>
+                                            </ToggleButton>
+                                            <ToggleButton Background="Transparent" BorderThickness="0" IsChecked="{x:Bind IsPinned, Mode=TwoWay}">
+                                                <FontIcon Glyph="&#xE718;" FontSize="14"/>
+                                            </ToggleButton>
+                                        </StackPanel>
+
+                                        <TextBlock Grid.Column="1" Text="{x:Bind Author, Mode=OneWay}" VerticalAlignment="Center" FontSize="11" Foreground="Gray" TextTrimming="CharacterEllipsis" MaxWidth="70"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+
+                <!-- 2. Editor Tab Overview Grid -->
+                <GridView x:Name="EditorGridView" Grid.Row="2" ItemsSource="{x:Bind DisplayedApps, Mode=OneWay}" Visibility="Collapsed">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="local:GameApp">
+                            <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Width="320" Height="220" Margin="8">
+                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
+                                    <TextBlock Text="{x:Bind Name, Mode=OneWay}" FontWeight="SemiBold" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" MaxWidth="260"/>
+                                    <Button HorizontalAlignment="Center" Click="EditButton_Click">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <FontIcon Glyph="&#xE70F;"/>
+                                            <TextBlock Text="Edit"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+
+                <!-- 3. Dedicated Card Editor Panel -->
+                <Grid x:Name="EditorPanel" Grid.Row="2" Visibility="Collapsed" HorizontalAlignment="Left" MaxWidth="500">
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="Edit Metadata" FontSize="24" FontWeight="SemiBold"/>
+                        
+                        <TextBox x:Name="EditNameBox" Header="App Name" Width="320" HorizontalAlignment="Left"/>
+                        <TextBox x:Name="EditAuthorBox" Header="Author Name" Width="320" HorizontalAlignment="Left"/>
+                        
+                        <TextBlock Text="Assets" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                        <StackPanel Orientation="Horizontal" Spacing="16">
+                            <StackPanel Spacing="8">
+                                <Button Click="ChangeIcon_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE8B9;"/>
+                                        <TextBlock Text="Change Icon"/>
+                                    </StackPanel>
+                                </Button>
+                                <Image x:Name="EditIconPreview" Width="40" Height="40" HorizontalAlignment="Left" Stretch="UniformToFill"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="8">
+                                <Button Click="ChangeBanner_Click">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <FontIcon Glyph="&#xE8B9;"/>
+                                        <TextBlock Text="Change Banner"/>
+                                    </StackPanel>
+                                </Button>
+                                <Image x:Name="EditBannerPreview" Width="100" Height="40" HorizontalAlignment="Left" Stretch="UniformToFill"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Spacing="16" Margin="0,24,0,0">
+                            <Button Content="Save Changes" Background="Green" Foreground="White" Width="140" Click="SaveEdit_Click"/>
+                            <Button Content="Discard" Background="Red" Foreground="White" Width="140" Click="DiscardEdit_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <!-- 4. Empty View Placeholder -->
+                <Grid x:Name="EmptyStateGrid" Grid.Row="2" Visibility="Collapsed">
+                    <TextBlock Text="Nothing to show here :(" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Foreground="Gray"/>
+                </Grid>
+
+                <!-- 5. About Tab -->
+                <StackPanel x:Name="AboutGrid" Grid.Row="2" Visibility="Collapsed" HorizontalAlignment="Left" MaxWidth="600">
+                    <TextBlock Text="This is a placeholder description for the App Library. It allows you to organize, launch, and edit metadata for your executable applications seamlessly." TextWrapping="Wrap" Margin="0,0,0,24"/>
+                    
+                    <TextBlock Text="Copyright © 2026 Feline Games" Margin="0,0,0,24" FontWeight="SemiBold"/>
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <Button Grid.Column="0" Click="LicenseButton_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE8DA;"/>
+                                <TextBlock Text="License"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Grid.Column="2" Click="SourceCodeButton_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE8C6;"/>
+                                <TextBlock Text="Source Code"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+
+            </Grid>
+        </NavigationView>
+    </Grid>
+</Page>
