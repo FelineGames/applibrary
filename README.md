@@ -1,36 +1,66 @@
-# Local Games Library Manager
+## App Library
 
-> Made by **Feline Games**
->
-> Licensed Under [```MIT License```](https://opensource.org/license/mit)
+> **The Official Source Code for App Library**
 
-## Screenshots
-<img width="1919" height="984" alt="image" src="https://github.com/user-attachments/assets/4a103189-b6e4-457a-b8e4-84b6b94c1147" />
+[![License:](https://img.shields.io/badge/License-MIT%202.0-blue.svg)](LICENSE)
+[![GitHub Issues](https://img.shields.io/github/issues/FelineGames/applibrary)](https://github.com/FelineGames/applibrary/issues)
+[![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-blue)](https://github.com/FelineGames/forge/discussions)
 
-## What's new in v0.5?
+---
 
-• Game Manager (Add Main Executable Manually)
+## 📌 Quick Links
 
-• Edit Game Icon, Title, Description & Author!
+- 📋 **[Contributing](CONTRIBUTING.md)**
+- 🔒 **[Privacy Policy](https://felinegames.qzz.io/policy/)** - policies
+- 📝 **[Terms of Servics](https://felinegames.qzz.io/policy/terms)** - terms
+  
+---
 
-• **Settings** Enables you to change Main Header (e.g. Library is Default) and Also see Developer Credits [_More Features Coming Soon_]
+## Project Overview
 
-## Roadmap (Commitments)
+- Developed with the WinUI framework provided by Microsoft included in Windows App SDK.
+- Written in Pure C# and XAML for ui in .NET 10 (core)
+- Originally written in Python → [View Deprecated Source Code](https://github.com/felinegames/AppLibrary/tree/legacy)
+- The Solution can only be opened in certain IDEs like Visual Studio, VS Code and JetBrains Rider.
 
-• Auto-detect **Game Folders** (Default: Desktop\Saves\<YourGame>)
+---
 
-• Coming Soon
+> **Reworked from the ground up with [WinUI 3](https://learn.microsoft.com/en-us/windows/apps/winui/winui3/)**.
+> Using Microsoft's new **[Windows App SDK](https://learn.microsoft.com/en-us/windows/apps/windows-app-sdk/)**, 
+we've just upgraded to a framework native to **Windows** PCs.
 
-## IDE Suggestions
+# Development Details
+• To Fork, Modify and Distribute your own version of App Library.
 
-• **VS Code** (For Linux, assuming Python is installed)
+*Visual Studio Code (Version 1.108.1 or higher)
 
-• **Visual Studio** (Python Development Workload)
+*__Developer Mode__ Must be enabled on your machine.
+* Go to **Settings** > **System** > For Developers (or Privacy & Security > For developers) and toggle *Developer Mode* on
 
-• **PyCharm** (Not Recommended for Windows users)
- 
-## Framework Dependency Requirement:
+*.NET 8 SDK or newer is required to be installed on Local Machine.
 
-• [Tkinter] ❌
+***Windows App Development** (CLI) for Power Users.
+* To install via *Terminal*: ```winget install Microsoft.WinAppCli```
 
-• [PyQt6] ✅
+***C# Dev Kit**: Official Microsoft extension bundle that provides rich C# editing, native debugging, and Intellisense.
+
+*Install **WinUI** C# Templates:
+* ```dotnet new install Microsoft.WindowsAppSDK.WinUI.CSharp.Templates```
+
+*Create a New **WinUI App**:
+* ```dotnet new winui -n applibrary```
+
+---
+
+## 📄 License
+
+- 🍪 Permissive Access to freely fork & modify into it's own custom Standalone App.
+- ⚠️ Required to give credits to this repository (if you're making it Proprietary, not applicable for Open Source Forks)
+- 🪪 AppLibrary is licensed under the **MIT License**. See [LICENSE](LICENSE) for details.
+
+---
+
+## Trademark Owner™
+
+- **Publisher:** Feline Games
+- **Developer:** @.kelsa_ / @notsummer69 (formerly)
